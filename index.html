@@ -6,45 +6,81 @@
 
 <style>
   /* Page layout for EVM */
+body {
+  margin: 0;
+}
+
+.evm {
+  display: flex;
+  flex-direction: column; /* mobile */
+  align-items: center;
+  gap: 16px;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
   .evm {
-    display: flex;
-    flex-direction: column; /* mobile first: VVPAT on top */
+    flex-direction: row;
     align-items: center;
-    gap: 16px;
   }
+}
 
-  /* Desktop / tablet layout */
-  @media (min-width: 768px) {
-    .evm {
-      flex-direction: row; /* desktop: side by side */
-      align-items: flex-start;
-    }
-  }
+.svg-vvpat-wrapper {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+}
 
-  svg {
-    width: 100%;
-    max-width: 600px;
-    display: block;
-  }
-</style>
+.svg-vvpat {
+  width: 200px;
+  max-width: 90vw;
+  display: block;
+}
+.svg-ballot-unit-wrapper {
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.svg-ballot-unit {
+  width: 320px;      /* control size here */
+  max-width: 95vw;
+  display: block;
+}
+
+  </style>
 </head>
 
 <body>
 
 <div class="evm">
 
+
+	<div class="svg-vvpat-wrapper">	
   <!-- ================= VVPAT ================= -->
   <!-- VVPAT is placed FIRST so it appears on top on phones -->
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 200 300"
+    preserveAspectRatio="xMidYMin meet"
+    class="svg-vvpat"
   >
 
-    <rect x="0" y="0" width="200" height="300" rx="10"
-          fill="#f2f2f2" stroke="#aaa"/>
-
+    <!-- this is VVPAT Main Box-->
+	<rect 
+	  x="0" 
+	  y="0" 
+	  width="200" 
+	  height="240" 
+	  rx="6"
+	  fill="gainsboro" 
+	  stroke="#aaa"/>
+		
     <rect x="30" y="30" width="140" height="80"
-          fill="#000"/>
+          fill="black"/>
 
     <g id="slip" opacity="0">
       <rect x="40" y="35" width="120" height="60"
@@ -59,11 +95,14 @@
     </text>
 
   </svg>
+	</div>
 
-  <!-- ================= BALLOT UNIT ================= -->
+<!-- ================= BALLOT UNIT ================= -->
+<div class="svg-ballot-unit-wrapper">
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 600 720"
+    class="svg-ballot-unit"
   >
 
     <style>
@@ -102,7 +141,7 @@
     </style>
 
     <!-- EVM -->
-    <g id="BallotUnit" transform="translate(10,10)">
+    <g id="BallotUnit" transform="translate(130,10)">
 
       <!--This is main rectangle in which all buttons and candidates are -->
       <rect x="0" y="0" width="340" height="550" rx="18"
@@ -163,6 +202,7 @@
     </g>
 
   </svg>
+</div>
 
 </div>
 

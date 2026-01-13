@@ -1,107 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EVM VVPAT Light Sensor Demo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  /* Page layout for EVM */
+  .evm {
+    display: flex;
+    flex-direction: column; /* mobile first: VVPAT on top */
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Desktop / tablet layout */
+  @media (min-width: 768px) {
+    .evm {
+      flex-direction: row; /* desktop: side by side */
+      align-items: flex-start;
+    }
+  }
+
+  svg {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+  }
+</style>
 </head>
 
 <body>
 
-<!-- SVG START -->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 600 720"
-  width="100%"
-  style="max-width:600px; display:block; margin:auto;"
->
+<div class="evm">
 
-  <style>
-    .BallotUnitBody {
-      fill: gainsboro;
-      stroke: #b5b5b5;
-      stroke-width: 2;
-    }
-    .BallotUnitHeader {
-      fill: lightgray;
-      stroke: darkgray;
-    }
-    .BallotUnitNamePanel {
-      fill: white;
-      stroke: #ccc;
-      rx: 8;
-    }
-    .button {
-      fill: #d9d9d9;
-      stroke: #999;
-      cursor: pointer;
-    }
-    .button:active {
-      transform: translateY(2px);
-    }
-    .led {
-      fill: dimgray;
-    }
-    .led.on {
-      fill: green;
-      filter: drop-shadow(0 0 6px #00ff00);
-    }
-    #slip {
-      transition: opacity 0.3s;
-    }
-  </style>
+  <!-- ================= VVPAT ================= -->
+  <!-- VVPAT is placed FIRST so it appears on top on phones -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 200 300"
+  >
 
-  <!-- EVM -->
-<g id="BallotUnit" transform="translate(10,10)">
-  <!--This is main rectangle in which all buttons and candidates are --!>
-  <rect x="0" y="0" width="340" height="550" rx="18" class="BallotUnitBody"/>
-
-  <!--this is rectangle which is head of ballot unit where text "DEMO VOTING MACHINE" is written.-->
-
-<rect x="10" y="10"
-      width="320" height="60" rx="8"
-      class="BallotUnitHeader"/>
-
-<!-- [there is no way to center text inside a rectangle. svg has no parent child relationship. so Center of that rectangle must be calculated manually"
-Center X = 10 + (320 / 2) = 170
-Center Y = 10 + (60 / 2) = 40
--->
-<text x="170" y="40"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      class="BallotUnitHeaderText">
-  DEMO VOTING MACHINE
-</text>
-
-
-  <!-- Candidates -->
-  <g transform="translate(0,100)">
-    <g>
-      <rect x="20" y="0" width="220" height="44" class="BallotUnitNamePanel"/>
-      <text x="30" y="28"
-      font-size="24"
-      font-weight="bold"
-      >Apple 🍎</text>
-      <circle id="led-1" cx="250" cy="22" r="6" class="led"/>
-      <rect x="270" y="4" width="60" height="36" rx="6"
-            class="button" onclick="vote(1)"/>
-    </g>
-
-    <g transform="translate(0,60)">
-      <rect x="20" y="0" width="220" height="44" class="BallotUnitNamePanel"/>
-      <text x="30" y="28"
-      font-size="24"
-      font-weight="bold"
-      >Banana 🍌</text>
-      <circle id="led-2" cx="250" cy="22" r="6" class="led"/>
-      <rect x="270" y="4" width="60" height="36" rx="6"
-            class="button" onclick="vote(2)"/>
-    </g>
-  </g>
-</g>
-
-  <!-- VVPAT -->
-  <g id="vvpat" transform="translate(380,120)">
     <rect x="0" y="0" width="200" height="300" rx="10"
           fill="#f2f2f2" stroke="#aaa"/>
 
@@ -119,30 +57,134 @@ Center Y = 10 + (60 / 2) = 40
     <text x="100" y="130" text-anchor="middle" font-size="12">
       VVPAT
     </text>
-  </g>
 
-  <script>
-    function vote(n) {
-      document.querySelectorAll('.led')
-        .forEach(l => l.classList.remove('on'));
+  </svg>
 
-      document.getElementById('led-' + n)
-        .classList.add('on');
+  <!-- ================= BALLOT UNIT ================= -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 600 720"
+  >
 
-      document.getElementById('slip-text')
-        .textContent = 'Candidate ' + n;
+    <style>
+      .BallotUnitBody {
+        fill: gainsboro;
+        stroke: #b5b5b5;
+        stroke-width: 2;
+      }
+      .BallotUnitHeader {
+        fill: lightgray;
+        stroke: darkgray;
+      }
+      .BallotUnitNamePanel {
+        fill: white;
+        stroke: #ccc;
+        rx: 8;
+      }
+      .button {
+        fill: #d9d9d9;
+        stroke: #999;
+        cursor: pointer;
+      }
+      .button:active {
+        transform: translateY(2px);
+      }
+      .led {
+        fill: dimgray;
+      }
+      .led.on {
+        fill: green;
+        filter: drop-shadow(0 0 6px #00ff00);
+      }
+      #slip {
+        transition: opacity 0.3s;
+      }
+    </style>
 
-      const slip = document.getElementById('slip');
-      slip.style.opacity = 1;
+    <!-- EVM -->
+    <g id="BallotUnit" transform="translate(10,10)">
 
-      setTimeout(() => {
-        slip.style.opacity = 0;
-      }, 3000);
-    }
-  </script>
+      <!--This is main rectangle in which all buttons and candidates are -->
+      <rect x="0" y="0" width="340" height="550" rx="18"
+            class="BallotUnitBody"/>
 
-</svg>
-<!-- SVG END -->
+      <!--this is rectangle which is head of ballot unit where text "DEMO VOTING MACHINE" is written.-->
+
+      <rect x="10" y="10"
+            width="320" height="60" rx="8"
+            class="BallotUnitHeader"/>
+
+      <!--
+      [there is no way to center text inside a rectangle. svg has no parent child relationship.
+       so Center of that rectangle must be calculated manually]
+
+      Center X = 10 + (320 / 2) = 170
+      Center Y = 10 + (60 / 2) = 40
+      -->
+      <text x="170" y="40"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            class="BallotUnitHeaderText">
+        DEMO VOTING MACHINE
+      </text>
+
+      <!-- Candidates -->
+      <g transform="translate(0,100)">
+
+        <g>
+          <rect x="20" y="0" width="220" height="44"
+                class="BallotUnitNamePanel"/>
+          <text x="30" y="28"
+                font-size="24"
+                font-weight="bold">
+            Apple 🍎
+          </text>
+          <circle id="led-1" cx="250" cy="22" r="6"
+                  class="led"/>
+          <rect x="270" y="4" width="60" height="36" rx="6"
+                class="button" onclick="vote(1)"/>
+        </g>
+
+        <g transform="translate(0,60)">
+          <rect x="20" y="0" width="220" height="44"
+                class="BallotUnitNamePanel"/>
+          <text x="30" y="28"
+                font-size="24"
+                font-weight="bold">
+            Banana 🍌
+          </text>
+          <circle id="led-2" cx="250" cy="22" r="6"
+                  class="led"/>
+          <rect x="270" y="4" width="60" height="36" rx="6"
+                class="button" onclick="vote(2)"/>
+        </g>
+
+      </g>
+    </g>
+
+  </svg>
+
+</div>
+
+<script>
+  function vote(n) {
+    document.querySelectorAll('.led')
+      .forEach(l => l.classList.remove('on'));
+
+    document.getElementById('led-' + n)
+      .classList.add('on');
+
+    document.getElementById('slip-text')
+      .textContent = 'Candidate ' + n;
+
+    const slip = document.getElementById('slip');
+    slip.style.opacity = 1;
+
+    setTimeout(() => {
+      slip.style.opacity = 0;
+    }, 3000);
+  }
+</script>
 
 </body>
 </html>

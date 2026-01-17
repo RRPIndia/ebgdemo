@@ -170,11 +170,13 @@ body {
         width="118" height="78"
         fill="white"
   	stroke="#ccc"/>
-  <text id="vvpat-slip-text"
+
+  <!-- uses js to show slip-->
+  <text id="vvpat-slip-icon"
         x="100" y="75"
         text-anchor="middle"
         dominant-baseline="middle"
-        font-size="42"></text>
+        font-size="42">text</text>
 </g>
 
 </svg>
@@ -342,7 +344,7 @@ function tempLED(n) {
 }
 
 function showVVPAT(n) {
-  const text = document.getElementById('vvpat-slip-text');
+  const text = document.getElementById('vvpat-slip-icon');
 
   lastVotedCandidate = (n === 1) ? '🍎' : '🍌';
   text.textContent = lastVotedCandidate;
@@ -350,6 +352,7 @@ function showVVPAT(n) {
   artificialLightOn = true;   // internal lamp ON
   updateSlipVisibility();
 }
+
 function vote(el, n) {
   if (!acquireLock()) return;
 

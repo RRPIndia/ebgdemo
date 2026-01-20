@@ -81,6 +81,78 @@ body {
      viewBox="0 0 600 720"
      class="svg-vvpat">
 
+<defs>
+<g id="vvpat-slip">
+  <rect x="0" y="0"
+        width="148" height="98"
+        fill="#fdfdfd"
+  	stroke="#c4c4c4"
+	rx="4"/>
+  <!-- uses js to show slip-->
+  <text x="74" y="49"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="42"></text>
+</g>
+</defs>
+
+<g transform="translate(130,40)">
+
+<!-- Hinges -->
+  <rect x="-8" y="126" width="8" height="48" rx="2" fill="#999"/>
+  <circle cx="-3" cy="150" r="3" fill="#666"/>
+
+  <rect x="-8" y="376" width="8" height="48" rx="2" fill="#999"/>
+  <circle cx="-3" cy="400" r="3" fill="#666"/>
+
+<!-- Fixed VVPAT inner base interior of vvpat) (always visible) -->
+<rect x="0" y="0"
+      width="340" height="550"
+      rx="18"
+      fill="#b0b0b0"
+      stroke="#9a9a9a"/>
+<rect x="2" y="2"
+      width="336" height="546"
+      rx="17"
+      fill="none"
+      stroke="#8c8c8c"
+      stroke-width="3"/>
+
+<g id="vote-1-placeholder"></g>
+<g id="vote-2-placeholder"></g>
+<g id="vote-3-placeholder"></g>
+<g id="vote-4-placeholder"></g>
+<!--=======start of lid========-->
+<g id="vvpat-top">
+  <rect x="0" y="0" 
+	width="340"
+	height="550"
+        rx="18"
+/>
+
+  <!--black glass-->
+  <rect x="95" y="30"
+	width="150" 
+	height="100"
+        fill="black"
+	rx="4"/>
+
+  <!--VVPAT FOOTER FOR TEXT-->
+  <rect x="15" y="475" rx="8" width="310" height="60" class="vvpat-footer"/>
+
+  <text x="170" y="505" text-anchor="middle" dominant-baseline="middle" class="vvpat-footer-text"> MOCK VVPAT </text>
+</g>
+<!--========end of lid========-->
+
+<!-- VVPAT Slip -->
+<g id="vvpat-slip-placeholder"></g>
+</g>
+
+</svg>
+</div>
+
+<button onclick="toggleVVPAT()">Open / Close VVPAT</button>
+
 <style>
 #vvpat-top {
   fill: #e6e6e6;
@@ -125,83 +197,15 @@ body {
   transition: opacity 0.5s ease;
   opacity: 0;
 }
-#vvpat-slip {
-  display: none;          /* does not exist visually */
-  opacity: 0;
-  transition: opacity 0.6s ease, filter 0.6s ease;
-}
-
 #vvpat-top.open ~ #vvpat-slip {
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25));
 }
+
+use {
+  transition: transform 0.8s ease-in-out;
+}
 </style>
 
-
-<g transform="translate(130,40)">
-
-<!-- Hinges -->
-  <rect x="-8" y="126" width="8" height="48" rx="2" fill="#999"/>
-  <circle cx="-3" cy="150" r="3" fill="#666"/>
-
-  <rect x="-8" y="376" width="8" height="48" rx="2" fill="#999"/>
-  <circle cx="-3" cy="400" r="3" fill="#666"/>
-
-<!-- Fixed VVPAT inner base interior of vvpat) (always visible) -->
-<rect x="0" y="0"
-      width="340" height="550"
-      rx="18"
-      fill="#b0b0b0"
-      stroke="#9a9a9a"/>
-<rect x="2" y="2"
-      width="336" height="546"
-      rx="17"
-      fill="none"
-      stroke="#8c8c8c"
-      stroke-width="3"/>
-
-<!--=======start of lid========-->
-<g id="vvpat-top">
-  <rect x="0" y="0" 
-	width="340"
-	height="550"
-        rx="18"
-/>
-
-  <!--black glass-->
-  <rect x="95" y="30"
-	width="150" 
-	height="100"
-        fill="black"
-	rx="4"/>
-
-  <!--VVPAT FOOTER FOR TEXT-->
-  <rect x="15" y="475" rx="8" width="310" height="60" class="vvpat-footer"/>
-
-  <text x="170" y="505" text-anchor="middle" dominant-baseline="middle" class="vvpat-footer-text"> MOCK VVPAT </text>
-</g>
-<!--========end of lid========-->
-
-<!-- VVPAT Slip -->
-<g id="vvpat-slip" opacity="0">
-  <rect x="96" y="31"
-        width="148" height="98"
-        fill="#fdfdfd"
-  	stroke="#c4c4c4"
-	rx="4"/>
-
-  <!-- uses js to show slip-->
-  <text id="vvpat-slip-icon"
-        x="169" y="79"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="42"></text>
-</g>
-</g>
-
-</svg>
-</div>
-
-<button onclick="toggleVVPAT()">Open / Close VVPAT</button>
 
 <!-- ================= BALLOT UNIT ================= -->
 <div class="svg-ballot-unit-wrapper">
@@ -310,6 +314,13 @@ Banana 🍌
 </g>
 </svg>
 </div>
+<div id="debug" style="
+  position: fixed;
+  bottom: 8px;
+  left: 8px;
+  font-size: 14px;
+  color: #333;
+"></div>
 
 </div>
 
@@ -320,8 +331,14 @@ let unlockTimer = null;
 let vvpatOpen = false;
 let artificialLightOn = false;
 
+
 // ordered vote history
 const voteLog = new Map();
+
+
+function showDebug(msg) {
+  document.getElementById("debug").textContent = msg;
+}
 
 function getLastVote() {
   if (voteLog.size === 0) return null;
@@ -375,22 +392,41 @@ function updateSlipVisibility() {
 }
 
 function showVVPAT(buttonNumber) {
-  const text = document.getElementById('vvpat-slip-icon');
-
   const symbol = (buttonNumber === 1) ? '🍎' : '🍌';
 
-  const voteNumber = voteLog.size + 1;
+  const template = document.getElementById("vvpat-slip");
+  const slip = template.cloneNode(true);
+  slip.removeAttribute("id");
 
-  voteLog.set(voteNumber, {
-    button: buttonNumber,
-    symbol
-  });
+  const voteIndex = voteLog.size + 1;
+  const id = `vote-${voteIndex}`;
+  slip.setAttribute("id", id);
 
-  // show LAST vote only (same behaviour as before)
-  text.textContent = symbol;
+  slip.querySelector("text").textContent = symbol;
 
-  artificialLightOn = true;
-  updateSlipVisibility();
+  // preview position
+  slip.setAttribute("transform", "translate(96 31)");
+
+  document
+    .getElementById("vvpat-slip-placeholder")
+    .appendChild(slip);
+
+  voteLog.set(id, slip);
+
+  setTimeout(() => {
+    let x, y, placeholderId;
+
+    switch (voteIndex) {
+      case 1: x = 18;  y = 436; placeholderId = "vote-1-placeholder"; break;
+      case 2: x = 184; y = 436; placeholderId = "vote-2-placeholder"; break;
+      case 3: x = 18;  y = 320; placeholderId = "vote-3-placeholder"; break;
+      case 4: x = 184; y = 320; placeholderId = "vote-4-placeholder"; break;
+      default: return;
+    }
+
+    slip.setAttribute("transform", `translate(${x} ${y})`);
+    document.getElementById(placeholderId).appendChild(slip);
+  }, 8000);
 }
 
 function vote(el, n) {
@@ -406,7 +442,6 @@ function vote(el, n) {
 
   setTimeout(() => {
     artificialLightOn = false;
-    updateSlipVisibility();
   }, 7000);
 
   unlockTimer = setTimeout(releaseLock, 7000);
@@ -418,7 +453,6 @@ function toggleVVPAT() {
   vvpatOpen = !vvpatOpen;
   top.classList.toggle('open', vvpatOpen);
 
-  updateSlipVisibility();
 }
 </script>
 

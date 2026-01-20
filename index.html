@@ -414,22 +414,31 @@ function tempLED(n) {
 
 
 function updateSlipVisibility() {
-  const slip = document.getElementById('vvpat-slip');
+  const slips = Array.from(voteLog.values());
+  if (slips.length === 0) return;
 
-  // Never show before first vote
-  if (voteLog.size === 0) {
-    slip.style.display = 'none';
-    slip.style.opacity = 0;
-    return;
-  }
+  const previewSlip = slips[slips.length - 1];
 
-  slip.style.display = 'block';
+  slips.forEach(slip => {
 
-  if (vvpatOpen || artificialLightOn) {
-    slip.style.opacity = 1;
-  } else {
-    slip.style.opacity = 0;
-  }
+    // 1️⃣ Lid open → all visible
+    if (vvpatOpen) {
+      slip.setAttribute("opacity", "1");
+    }
+
+    // 2️⃣ Lid closed + artificial light ON → only preview
+    else if (artificialLightOn) {
+      slip.setAttribute(
+        "opacity",
+        slip === previewSlip ? "1" : "0"
+      );
+    }
+
+    // 3️⃣ Lid closed + artificial light OFF → all hidden
+    else {
+      slip.setAttribute("opacity", "0");
+    }
+  });
 }
 
 function showVVPAT(buttonNumber) {
@@ -449,6 +458,17 @@ function showVVPAT(buttonNumber) {
   voteLog.set(id, slip);
 
   repositionSlips();
+  // 🔥 ARTIFICIAL LIGHT STARTS HERE
+  artificialLightOn = true;
+  updateSlipVisibility();
+
+  // reset artificial light timer
+  if (unlockTimer) clearTimeout(unlockTimer);
+
+  unlockTimer = setTimeout(() => {
+    artificialLightOn = false;
+    updateSlipVisibility();
+  }, 7000);
 }
 
 function vote(el, n) {
@@ -474,6 +494,8 @@ function toggleVVPAT() {
 
   vvpatOpen = !vvpatOpen;
   top.classList.toggle('open', vvpatOpen);
+    updateSlipVisibility();
+
 
 }
 </script>

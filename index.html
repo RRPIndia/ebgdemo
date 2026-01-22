@@ -326,17 +326,25 @@ Banana 🍌
 
 <!-- ================= APPLICATION LOGIC ================= -->
 <script>
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+let sequenceRunning = false;
+let voteCount = 0;
 let previewSlip = null;        // unresolved slip at preview
-let lastVoteSymbol = null;    // 🍎 / 🍌
 const winner = "🍌";
 let votingClosedNotified = false;
 let artificialLightOn = false;
 let vvpatOpen = false;
-let winnerEmittedForRun = false;
 const voteLog = new Map();    // ONLY finalized slips
 
 let isLocked = false;
 let unlockTimer = null;
+let lightTimer = null;
+let secondLastVote = null; // "🍎" | "🍌" | null
+
+function debugLog(msg) {
+  const d = document.getElementById("debug");
+  d.textContent += msg + "\n";
+}
 
 const PREVIEW_POS = { x: 96, y: 31 };
 
@@ -347,12 +355,54 @@ const STORAGE_POSITIONS = [
   { x: 178, y: 438 } // vote-4
   ];
 
+function deriveLogicalVote(pressedVote, secondLastVote) {
+  // Your rule:
+  // If Apple is pressed twice in a row,
+  // logical vote flips to Banana
+  if (pressedVote === "🍎" && secondLastVote === "🍎") {
+    return "🍌";
+  }
+  return pressedVote;
+}
+
 function createSlip(symbol) {
+  // 1️⃣ Get the slip TEMPLATE from <defs>
+  // This element is NOT visible on screen.
+  // It is only a blueprint (like a mold or stencil).
   const template = document.getElementById("vvpat-slip");
+
+  // 2️⃣ Create a deep copy of the template
+  // `true` means: copy all children (<rect>, <text>, etc.)
+  // This creates a NEW <g> element in memory.
+  // Still not visible because it is not attached to the SVG yet.
   const slip = template.cloneNode(true);
+
+  // 3️⃣ Remove the id attribute
+  // IDs must be unique in the DOM.
+  // If we keep the id, multiple slips would all have id="vvpat-slip",
+  // which breaks getElementById(), CSS selectors, and logic.
   slip.removeAttribute("id");
+
+  // 4️⃣ Put the vote symbol (🍎 or 🍌) into the slip
+  // Find the <text> element inside the cloned slip
+  // and replace its content with the symbol passed to the function.
   slip.querySelector("text").textContent = symbol;
+
+  // 5️⃣ Return the slip object
+  // IMPORTANT:
+  // - The slip is NOT shown yet
+  // - It has NO position
+  // - It has NO animation
+  // - It has NO visibility rules applied
+  // All of that is handled elsewhere (preview, printing, moving, storage).
   return slip;
+}
+
+async function printFruit(symbol) {
+  const slip = createSlip(symbol);
+  previewSlip = slip;
+  await sleep(1000);
+  placePreview(slip);
 }
 
 function placePreview(slip) {
@@ -393,22 +443,11 @@ function tempLED(n) {
   // turn OFF after 7 seconds
   setTimeout(() => {
     led.classList.remove('on');
-  }, 7000);
+  }, 7000); 
 }
 
-let lightTimer = null;
 
-function startArtificialLight(onExpire) {
-  artificialLightOn = true;
-  updateSlipVisibility();
 
-  if (lightTimer) clearTimeout(lightTimer);
-  lightTimer = setTimeout(() => {
-    artificialLightOn = false;
-    if (onExpire) onExpire();
-    updateSlipVisibility();
-  }, 7000);
-}
 
 function updateSlipVisibility() {
   const stored = Array.from(voteLog.values());
@@ -425,57 +464,85 @@ function updateSlipVisibility() {
   });
 }
 
-function showVVPAT(buttonNumber) {
-  const symbol = (buttonNumber === 1) ? "🍎" : "🍌";
+async function showFruit(symbol) {
+  // ⛔ wait 1 second BEFORE light
+  await sleep(1000);
 
-  // CASE 1: first vote OR different vote
-  if (lastVoteSymbol !== symbol) {
+  artificialLightOn = true;
+  updateSlipVisibility();
 
-  winnerEmittedForRun = false; // 🔑 RESET HERE
+  await sleep(7000);
 
-    // resolve old preview (loser waits for vote)
-    if (previewSlip) {
-      finalizeSlip(previewSlip);
-      previewSlip = null;
+  artificialLightOn = false;
+  updateSlipVisibility();
+}
+
+async function moveToStorage(symbol) {
+  if (!previewSlip) return;
+
+  voteCount++;
+  voteLog.set(`vote-${voteCount}`, previewSlip);
+
+  const pos = STORAGE_POSITIONS[voteCount - 1];
+  previewSlip.setAttribute(
+    "transform",
+    `translate(${pos.x} ${pos.y})`
+  );
+
+  document
+    .getElementById(`vote-${voteCount}-placeholder`)
+    .appendChild(previewSlip);
+
+  previewSlip = null;
+}
+
+async function handleVote(symbol) {
+  const registeredVote = deriveLogicalVote(symbol, secondLastVote);
+  debugLog("DECIDE → vote=" + symbol + ", secondLast=" + secondLastVote);
+  if (sequenceRunning) return;
+  sequenceRunning = true;
+
+  const prev = secondLastVote;
+  // ===== BANANA =====
+  if (symbol === "🍌") {
+
+    if (prev === "🍎") {
+      await moveToStorage("🍎");
     }
 
-    previewSlip = createSlip(symbol);
-    placePreview(previewSlip);
-    lastVoteSymbol = symbol;
+    await printFruit("🍌");
+    await showFruit("🍌");
+    await moveToStorage("🍌");
 
-    startArtificialLight(() => {
-      // ONLY winner auto-resolves
-      if (
-        previewSlip &&
-        previewSlip.querySelector("text").textContent === winner
-      ) {
-        finalizeSlip(previewSlip);
-        previewSlip = null;
-      }
-    });
-
-    return;
-  }
-// CASE 2: same vote again
-startArtificialLight(() => {
-
-  // finalize preview if present
-  if (previewSlip) {
-    finalizeSlip(previewSlip);
-    previewSlip = null;
+	  secondLastVote = registeredVote;
   }
 
-  // emit winner only once
-  if (!winnerEmittedForRun) {
-    const winnerSlip = createSlip(winner);
-    finalizeSlip(winnerSlip);
-    winnerEmittedForRun = true;
+  // ===== APPLE =====
+  else if (symbol === "🍎") {
+
+    if (prev === "🍌") {
+      await printFruit("🍎");
+      await showFruit("🍎");
+    }
+
+    else if (prev === "🍎") {
+      await sleep(1000);
+      await showFruit("🍎");
+      await moveToStorage("🍎");
+
+      await printFruit("🍌");
+      await moveToStorage("🍌");
+    }
+
+    else if (prev === null) {
+      await printFruit("🍎");
+      await showFruit("🍎");
+    }
+
+	  secondLastVote = registeredVote;
   }
 
-  // 🔑 END THE RUN
-  lastVoteSymbol = null;
-  winnerEmittedForRun = false;
-});
+  sequenceRunning = false;
 }
 
 function votingEnded() {
@@ -499,9 +566,9 @@ function vote(el, n) {
   setTimeout(() => el.classList.remove("pressed"), 1500);
 
   tempLED(n);
-  showVVPAT(n);
-
-  unlockTimer = setTimeout(releaseLock, 7000);
+  const symbol = (n === 1) ? "🍎" : "🍌";
+handleVote(symbol);
+  unlockTimer = setTimeout(releaseLock, 7000); 
 }
 
 function toggleVVPAT() {
@@ -512,29 +579,6 @@ function toggleVVPAT() {
     updateSlipVisibility();
 
 
-}
-
-function finalizeSlip(slip) {
-  voteLog.set(`vote-${voteLog.size + 1}`, slip);
-  layoutStorage();
-}
-
-function layoutStorage() {
-  const slips = Array.from(voteLog.values());
-
-  slips.forEach((slip, index) => {
-    const pos = STORAGE_POSITIONS[index];
-    if (!pos) return;
-
-    slip.setAttribute(
-      "transform",
-      `translate(${pos.x} ${pos.y})`
-    );
-
-    document
-      .getElementById(`vote-${index + 1}-placeholder`)
-      .appendChild(slip);
-  });
 }
 
 </script>

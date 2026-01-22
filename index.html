@@ -206,7 +206,25 @@ body {
   transform-origin: center;
 }
 
-<!--use { transition: transform 0.8s ease-in-out;}-->
+.slip-wrapper {
+  transition: transform 1s ease-in-out;
+}
+
+@keyframes fakePrint {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slip.printing {
+  animation: fakePrint 1s linear forwards;
+}
+
 </style>
 
 
@@ -409,20 +427,41 @@ function createSlip(symbol) {
 
 async function printFruit(symbol) {
   const slip = createSlip(symbol);
-  previewSlip = slip;
-  await sleep(1000);
+
   placePreview(slip);
+
+  slip.setAttribute("opacity", "1");
+  slip.classList.add("printing");
+
+  // wait for print animation
+  await sleep(1000);
+
+  // 🔑 stop printing forever
+  slip.classList.remove("printing");
 }
 
 function placePreview(slip) {
-  slip.setAttribute(
+  const wrapper = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "g"
+  );
+
+  wrapper.classList.add("slip-wrapper");
+
+  wrapper.setAttribute(
     "transform",
     `translate(${PREVIEW_POS.x} ${PREVIEW_POS.y})`
   );
-  document.getElementById("vvpat-slip-placeholder").appendChild(slip);
+
+  wrapper.appendChild(slip);
+
+  // 🔑 store wrapper, not slip
+  previewSlip = wrapper;
+
+  document
+    .getElementById("vvpat-slip-placeholder")
+    .appendChild(wrapper);
 }
-
-
 
 function getLastVote() {
   if (voteLog.size === 0) return null;
@@ -522,26 +561,25 @@ async function moveToStorage() {
   if (!previewSlip) return;
 
   voteCount++;
-  const slip = previewSlip;
+
+  const wrapper = previewSlip;
   previewSlip = null;
 
-  voteLog.set(`vote-${voteCount}`, slip);
+  voteLog.set(`vote-${voteCount}`, wrapper);
 
   const pos = STORAGE_POSITIONS[voteCount - 1];
 
-  // 1️⃣ Animate to storage position
-  slip.setAttribute(
+  // animate wrapper (positioned element)
+  wrapper.setAttribute(
     "transform",
     `translate(${pos.x} ${pos.y})`
   );
 
-  // 2️⃣ Wait for aoving  animation to finish
   await sleep(1000);
 
-  // 3️⃣ Re-parent AFTER animation completes
   document
     .getElementById(`vote-${voteCount}-placeholder`)
-    .appendChild(slip);
+    .appendChild(wrapper);
 }
 
 async function handleVote(symbol) {

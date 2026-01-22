@@ -201,18 +201,67 @@ body {
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25));
 }
 
-use {
-  transition: transform 0.8s ease-in-out;
+.slip {
+  transition: transform 1s ease-in-out;
+  transform-origin: center;
 }
+
+<!--use { transition: transform 0.8s ease-in-out;}-->
 </style>
 
 
 <!-- ================= BALLOT UNIT ================= -->
 <div class="svg-ballot-unit-wrapper">
-<svg xmlns="https://www.w3.org/2000/svg"
+<svg xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 600 720"
      class="svg-ballot-unit"
      >
+
+
+<g transform="translate(130,10)">
+  <rect x="0" y="0" rx="18" width="340" height="550" class="bu-body"/>
+
+  <rect x="10" y="10" rx="8"   width="320" height="60" class="bu-header"/>
+
+  <!-- SVG has no parent-child layout.
+       Center must be calculated manually -->
+  <text x="170" y="40"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        class="bu-header-text">
+	MOCK VOTING MACHINE
+  </text>
+
+  <g transform="translate(0,100)">
+    <g>
+      <rect x="20" y="0" width="220" height="44"
+            class="bu-name-panel"/>
+      <text x="30" y="28" font-size="24" font-weight="bold">
+Apple 🍎</text>
+      <!--warning led to.show that ballot unit is not is not ready for voting -->
+     <rect x="244" y="-25" height="23" width="86" rx="18" id="bu-warn" fill="green"/>
+
+      <circle id="led-1" cx="250" cy="22" r="6" class="led"/>
+      <circle id="led-2" cx="250" cy="82" r="6" class="led"/>
+      
+      <rect x="270" y="4" width="60" height="36" rx="6"
+            class="bu-button"
+            onclick="vote(this, 1)"/>
+      <rect x="270" y="64" width="60" height="36" rx="6"
+            class="bu-button"
+            onclick="vote(this, 2)"/>
+    </g>
+
+    <g transform="translate(0,60)">
+      <rect x="20" y="0" width="220" height="44"
+            class="bu-name-panel"/>
+      <text x="30" y="28" font-size="24" font-weight="bold">
+Banana 🍌
+      </text>
+
+    </g>
+  </g>
+</g>
 
 <style>
 
@@ -270,48 +319,7 @@ use {
 }
 </style>
 
-<g transform="translate(130,10)">
-  <rect x="0" y="0" rx="18" width="340" height="550" class="bu-body"/>
 
-  <rect x="10" y="10" rx="8"   width="320" height="60" class="bu-header"/>
-
-  <!-- SVG has no parent-child layout.
-       Center must be calculated manually -->
-  <text x="170" y="40"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        class="bu-header-text">
-	MOCK VOTING MACHINE
-  </text>
-
-  <g transform="translate(0,100)">
-    <g>
-      <rect x="20" y="0" width="220" height="44"
-            class="bu-name-panel"/>
-      <text x="30" y="28" font-size="24" font-weight="bold">
-Apple 🍎
-      </text>
-      <circle id="led-1" cx="250" cy="22" r="6" class="led"/>
-      <circle id="led-2" cx="250" cy="82" r="6" class="led"/>
-      
-      <rect x="270" y="4" width="60" height="36" rx="6"
-            class="bu-button"
-            onclick="vote(this, 1)"/>
-      <rect x="270" y="64" width="60" height="36" rx="6"
-            class="bu-button"
-            onclick="vote(this, 2)"/>
-    </g>
-
-    <g transform="translate(0,60)">
-      <rect x="20" y="0" width="220" height="44"
-            class="bu-name-panel"/>
-      <text x="30" y="28" font-size="24" font-weight="bold">
-Banana 🍌
-      </text>
-
-    </g>
-  </g>
-</g>
 </svg>
 </div>
 <div id="debug" style="
@@ -382,6 +390,7 @@ function createSlip(symbol) {
   // If we keep the id, multiple slips would all have id="vvpat-slip",
   // which breaks getElementById(), CSS selectors, and logic.
   slip.removeAttribute("id");
+  slip.classList.add("slip")
 
   // 4️⃣ Put the vote symbol (🍎 or 🍌) into the slip
   // Find the <text> element inside the cloned slip
@@ -422,11 +431,15 @@ function getLastVote() {
 function acquireLock() {
   if (isLocked) return false;
   isLocked = true;
+  const r = document.getElementById("bu-warn");
+  if (r) r.setAttribute("fill", "#ff9a00");
   return true;
 }
 
 function releaseLock() {
   isLocked = false;
+  const r = document.getElementById("bu-warn");
+  if (r) r.setAttribute("fill", "green");
   console.log('Machine unlocked');
 }
 
@@ -505,23 +518,30 @@ async function showFruit(symbol) {
   updateSlipVisibility();
 }
 
-async function moveToStorage(symbol) {
+async function moveToStorage() {
   if (!previewSlip) return;
 
   voteCount++;
-  voteLog.set(`vote-${voteCount}`, previewSlip);
+  const slip = previewSlip;
+  previewSlip = null;
+
+  voteLog.set(`vote-${voteCount}`, slip);
 
   const pos = STORAGE_POSITIONS[voteCount - 1];
-  previewSlip.setAttribute(
+
+  // 1️⃣ Animate to storage position
+  slip.setAttribute(
     "transform",
     `translate(${pos.x} ${pos.y})`
   );
 
+  // 2️⃣ Wait for aoving  animation to finish
+  await sleep(1000);
+
+  // 3️⃣ Re-parent AFTER animation completes
   document
     .getElementById(`vote-${voteCount}-placeholder`)
-    .appendChild(previewSlip);
-
-  previewSlip = null;
+    .appendChild(slip);
 }
 
 async function handleVote(symbol) {

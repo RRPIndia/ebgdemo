@@ -1,7 +1,3 @@
-:root {
-  --pagefind-ui-scale: 0.7;   /* subtle shrink */
-}
-
 .breadcrumb,
 .breadcrumb * {
   all: unset;

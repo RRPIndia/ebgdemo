@@ -24,45 +24,46 @@
   {# MAIN CONTENT #}
   <main>
 	<div class="content">
-		<nav class="breadcrumb" aria-label="Breadcrumb">
-  <a href="/">Home</a>
 
-  {% set currentPath = "" %}
-  {% set segments = page.url | pathSegments %}
+		{% set segments = page.url | pathSegments %}
 
-  {% for part in segments %}
-    <span class="crumb-sep">›</span>
+{% if segments.length > 1 %}
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
 
-    {% set currentPath = currentPath + "/" + part + "/" %}
+    {% set currentPath = "" %}
+    {% for part in segments %}
+      <span class="crumb-sep">›</span>
 
-    {% if loop.last %}
-      {# LAST PAGE: always clickable #}
-      <a href="{{ page.url }}">
-        {{ part | replace("-", " ") | title }}
-      </a>
+      {% set currentPath = currentPath + "/" + part + "/" %}
 
-    {% else %}
-      {# INTERMEDIATE LEVELS #}
-      {% set hasIndex = false %}
-      {% for p in collections.all %}
-        {% if p.url == currentPath %}
-          {% set hasIndex = true %}
-        {% endif %}
-      {% endfor %}
-
-      {% if hasIndex %}
-        <a href="{{ currentPath }}">
+      {% if loop.last %}
+        <a href="{{ page.url }}">
           {{ part | replace("-", " ") | title }}
         </a>
       {% else %}
-        <span class="crumb-disabled">
-          {{ part | replace("-", " ") | title }}
-        </span>
+        {% set hasIndex = false %}
+        {% for p in collections.all %}
+          {% if p.url == currentPath %}
+            {% set hasIndex = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% if hasIndex %}
+          <a href="{{ currentPath }}">
+            {{ part | replace("-", " ") | title }}
+          </a>
+        {% else %}
+          <span class="crumb-disabled">
+            {{ part | replace("-", " ") | title }}
+          </span>
+        {% endif %}
       {% endif %}
-    {% endif %}
-  {% endfor %}
-</nav>
-    {{ content | safe }}
+    {% endfor %}
+  </nav>
+{% endif %}
+
+		    {{ content | safe }}
     	</div>
   </main>
 

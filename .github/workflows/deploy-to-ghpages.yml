@@ -13,19 +13,25 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: 18
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build site
+      - name: Build Eleventy site
         run: npm run build-ghpages
+
+      # ✅ Pagefind runs HERE, not via npm
+      - name: Build Pagefind index
+        uses: cloudcannon/pagefind-action@v1
+        with:
+          site: _site
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'

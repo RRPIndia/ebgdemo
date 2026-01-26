@@ -4,12 +4,11 @@
   "private": true,
   "scripts": {
     "build": "node ./node_modules/@11ty/eleventy/cmd.js",
-    "build-ghpages": "node ./node_modules/@11ty/eleventy/cmd.js --pathprefix=/website/ && npm exec -- pagefind --site _site",
+    "build-ghpages": "node ./node_modules/@11ty/eleventy/cmd.js --pathprefix=/website/",
     "serve": "node ./node_modules/@11ty/eleventy/cmd.js --serve"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "@11ty/eleventy-navigation": "^0.3.5",
-    "pagefind": "^1.0.4"
+    "@11ty/eleventy-navigation": "^0.3.5"
   }
 }

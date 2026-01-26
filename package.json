@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "build": "npx @11ty/eleventy && npx pagefind --site _site"
+    "build": "node ./node_modules/@11ty/eleventy/cmd.cjs && npx pagefind --site _site"
   },
   "dependencies": {
     "@11ty/eleventy-navigation": "^1.0.5"

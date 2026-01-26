@@ -17,26 +17,51 @@
 
 <body>
 
-  {# HEADER (global navigation) #}
-  {% include "header.njk" %}
+	{# HEADER (global navigation) #}
+	{% include "header.njk" %}
 
-  {# BREADCRUMB (contextual, page-specific) #}
-  {% if eleventyNavigationBreadcrumb %}
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    {% for crumb in eleventyNavigationBreadcrumb %}
-      {% if loop.last %}
-        <span>{{ crumb.title }}</span>
-      {% else %}
-        <a href="{{ crumb.url }}">{{ crumb.title }}</a>
-        <span class="sep">›</span>
-      {% endif %}
-    {% endfor %}
-  </nav>
-  {% endif %}
-
+  
   {# MAIN CONTENT #}
   <main>
 	<div class="content">
+		<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a>
+
+  {% set currentPath = "" %}
+  {% set segments = page.url | pathSegments %}
+
+  {% for part in segments %}
+    <span class="crumb-sep">›</span>
+
+    {% set currentPath = currentPath + "/" + part + "/" %}
+
+    {% if loop.last %}
+      {# LAST PAGE: always clickable #}
+      <a href="{{ page.url }}">
+        {{ part | replace("-", " ") | title }}
+      </a>
+
+    {% else %}
+      {# INTERMEDIATE LEVELS #}
+      {% set hasIndex = false %}
+      {% for p in collections.all %}
+        {% if p.url == currentPath %}
+          {% set hasIndex = true %}
+        {% endif %}
+      {% endfor %}
+
+      {% if hasIndex %}
+        <a href="{{ currentPath }}">
+          {{ part | replace("-", " ") | title }}
+        </a>
+      {% else %}
+        <span class="crumb-disabled">
+          {{ part | replace("-", " ") | title }}
+        </span>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</nav>
     {{ content | safe }}
     	</div>
   </main>

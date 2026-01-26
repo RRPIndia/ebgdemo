@@ -2,6 +2,48 @@
   --pagefind-ui-scale: 0.7;   /* subtle shrink */
 }
 
+.breadcrumb,
+.breadcrumb * {
+  all: unset;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;        /* 🔑 fixes above/below line issue */
+  gap: 0.5rem;
+
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+
+  font-size: 0.9rem;
+  line-height: 1;             /* 🔑 normalize text box height */
+}
+
+.breadcrumb a,
+.breadcrumb span {
+  display: inline-flex;       /* 🔑 text becomes box, not baseline */
+  align-items: center;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.breadcrumb a {
+  color: #034ad8;
+  cursor: pointer;
+}
+
+.breadcrumb .crumb-disabled {
+  color: #777;
+}
+
+.breadcrumb .crumb-sep {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  color: #999;
+  user-select: none;
+}
 
 /* =========================
    HEADER + NAV

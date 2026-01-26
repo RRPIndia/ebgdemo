@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "node ./node_modules/@11ty/eleventy/cmd.js",
-    "build-ghpages": "node ./node_modules/@11ty/eleventy/cmd.js --pathprefix=/website/ && node ./node_modules/pagefind/bin/pagefind.cjs --site _site",
+    "build-ghpages": "node ./node_modules/@11ty/eleventy/cmd.js --pathprefix=/website/ && npm exec -- pagefind --site _site",
     "serve": "node ./node_modules/@11ty/eleventy/cmd.js --serve"
   },
   "devDependencies": {

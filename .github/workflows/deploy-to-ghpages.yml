@@ -38,7 +38,7 @@ jobs:
 
       # 👇 THIS IS THE ONLY ADDITION
       - name: Make Eleventy executable
-        run: chmod +x node_modules/.bin/pagefind
+        run: chmod +x node_modules/.bin/pagefind/lib/runner/bin.cjs
       - run: ls -l node_modules/.bin | grep pagefind
       - run: npm run build-ghpages
       

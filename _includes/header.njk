@@ -23,15 +23,15 @@
      </li>
 
       <li class="util-grow">
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<div id="search"></div>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        new PagefindUI({ element: "#search", showSubResults: true });
+    });
+</script>
 
-        <form action="/search/" class="util-stack">
-          <label>
-            <input type="search" name="q" placeholder="Search…">
-          </label>
-          <button type="submit">
-            <span class="sr-only">Search</span>
-          </button>
-        </form>
       </li>
 
     </ul>

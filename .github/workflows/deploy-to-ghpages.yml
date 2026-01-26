@@ -29,7 +29,7 @@ jobs:
 
       # ✅ Correct Pagefind action
       - name: Build Pagefind index
-        uses: pagefind/pagefind-action@v1
+        uses: Pagefind/pagefind-action@v1
         with:
           site: _site
 

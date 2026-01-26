@@ -1,13 +1,3 @@
-{
-  "type": "module",
-  "scripts": {
-    "build": "node ./node_modules/@11ty/eleventy/cmd.js && node ./node_modules/pagefind/pagefind.js --site _site"
-  },
-  "dependencies": {
-    "@11ty/eleventy-navigation": "^1.0.5"
-  },
-  "devDependencies": {
-    "@11ty/eleventy": "^2.0.1",
-    "pagefind": "^1.4.0"
-  }
+"scripts": {
+  "build-ghpages": "npx @11ty/eleventy --pathprefix=/website/"
 }

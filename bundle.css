@@ -24,11 +24,13 @@
   text-align: center;
 }
 
-.header-brand .brand-link {
+.brand-link {
   text-decoration: none;
-  font-size: clamp(20px, 6vw, 36px);
-  font-weight: 700;
+  font-size: clamp(28px, 11vw, 48px); /* bigger overall */
+  font-weight: 900;
   line-height: 1.15;
+  color: #000; /* solid black */
+  letter-spacing: -0.02em;
 }
 
 /* ROW 2: sections (nav only) */
@@ -84,6 +86,10 @@ body {
   line-height: 1.5;
 }
 
+/*====================
+      Main 
+====================*/
+
 main {
   flex: 1;
   text-align: start;
@@ -91,6 +97,14 @@ main {
   margin: 5vw auto;
   max-width: 80ch;
 }
+
+.content {
+  max-width: 95vw;
+  margin-inline: auto;
+}
+
+/*====================
+====================*/
 
 /* Safe <br> */
 br {
@@ -100,25 +114,28 @@ br {
 /* =========================
    TABLES
    ========================= */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* smooth swipe on mobile */
+}
 
-table {
-  table-layout: fixed;
-  border: 3px solid rgb(196, 186, 186);
+.table-scroll table {
+  width: max-content;      /* table grows as wide as needed */
   border-collapse: collapse;
 }
 
-th,
-tr {
-  border: 1px solid rgb(218, 201, 201);
+.table-scroll th,
+.table-scroll td {
+  white-space: nowrap;     /* 🚫 no text wrapping */
+  text-align: left;        /* optional: avoids weird centering */
 }
 
-th {
-  border-color: black;
-}
 
-th:nth-child(1) { width: 10ch; text-align: start; }
-th:nth-child(2) { width: 20ch; text-align: start; }
-th:nth-child(3) { width: 20ch; text-align: start; }
+table th,
+table td {
+  padding: 0.5rem 0.75rem; /* ← THIS is what you want */
+  white-space: nowrap;
+}
 
 /* =========================
    LINKS

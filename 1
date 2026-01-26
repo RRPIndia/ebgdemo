@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="google-site-verification"
+        content="nOVhyCaoXpjBXXPo-CqrEgfb2rKBCeNpaKtmZ-xNaeM">
+
+  <title>{{ title or "Right to Recall Party" }}</title>
+
+  <link rel="stylesheet" href="/bundle.css">
+  <script src="/bundle.js" defer></script>
+
+</head>
+
+<body>
+
+  {# HEADER (global navigation) #}
+  {% include "header.njk" %}
+
+{% if eleventyNavigation and eleventyNavigation.parent %}
+  {% set crumbs = collections.all | eleventyNavigationBreadcrumb(page) %}
+{% else %}
+  {% set crumbs = [] %}
+{% endif %}
+
+{% if crumbs.length > 1 %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  {% for crumb in crumbs %}
+    {% if loop.last %}
+      <span aria-current="page">{{ crumb.title }}</span>
+    {% else %}
+      <a href="{{ crumb.url }}">{{ crumb.title }}</a>
+      <span class="sep">›</span>
+    {% endif %}
+  {% endfor %}
+</nav>
+{% endif %}
+
+   {# MAIN CONTENT #}
+  <main>
+	<div class="content">
+    {{ content | safe }}
+    	</div>
+  </main>
+
+  {% include "footer.html" %}
+
+</body>
+</html>

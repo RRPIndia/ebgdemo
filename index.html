@@ -19,47 +19,52 @@
 
   
   <header class="elv-header">
+  <div class="elv-header-inner">
 
-<div class="elv-menu">
-    <ul class="elv-nav-menu list-bare fl fl-inline fl-nowrap">
+    <!-- ROW 1: Party name -->
+    <div class="header-brand">
+      <a href="/" class="brand-link">
+        Right to Recall<br>
+        Party
+      </a>
+    </div>
 
-      <li>
-        <a href="/" class="elv-nav-menu-logo">
-          <span class="sr-only">RRP</span>
-        </a>
-      </li>
+    <!-- ROW 2: Sections -->
+    <nav class="header-sections">
+      <ul class="elv-nav-menu">
 
-     <li>
-  <details class="nav-expand">
-    <summary>Read all drafts</summary>
-    <ul>
-      <li><a href="/drafts/personal/">Personal drafts</a></li>
-      <li><a href="/drafts/political/">Political drafts</a></li>
-      <li><a href="/drafts/archived/">Archived drafts</a></li>
-    </ul>
-  </details>
-</li> 
-      <li>
-     </li>
+        <li>
+          <details class="nav-expand">
+            <summary>Read all drafts</summary>
+            <ul>
+              <li><a href="/drafts/personal/">Personal drafts</a></li>
+              <li><a href="/drafts/political/">Political drafts</a></li>
+              <li><a href="/drafts/archived/">Archived drafts</a></li>
+            </ul>
+          </details>
+        </li>
 
-      <li class="util-grow">
+      </ul>
+    </nav>
 
-      </li>
+    <!-- ROW 3: Search -->
+    <div class="header-search">
+      <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+      <script src="/pagefind/pagefind-ui.js"></script>
 
-    </ul>
+      <div id="search"></div>
+
+      <script>
+        window.addEventListener('DOMContentLoaded', () => {
+          new PagefindUI({
+            element: "#search",
+            showSubResults: true
+          });
+        });
+      </script>
+    </div>
+
   </div>
-
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
-<script src="/pagefind/pagefind-ui.js"></script>
-<div id="search"></div>
-<script>
-    window.addEventListener('DOMContentLoaded', (event) => {
-        new PagefindUI({ element: "#search", showSubResults: true });
-    });
-</script>
-
-
-
 </header>
 
 

@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-     "prebuild": "chmod +x node_modules/.bin/eleventy",
-    "build": "node ./node_modules/@11ty/eleventy/cmd.js",
-    "build-ghpages": "npx @11ty/eleventy --pathprefix=/website/"
+    "prebuild": "chmod +x node_modules/.bin/eleventy node_modules/.bin/pathfind",
+    "build": "eleventy",
+    "build-ghpages": "npx eleventy --pathprefix=/website/ && npx pagefind --site _site"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "@11ty/eleventy-navigation": "^0.3.5"
+    "@11ty/eleventy-navigation": "^0.3.5",
+    "pagefind": "^1.0.0"
   }
 }

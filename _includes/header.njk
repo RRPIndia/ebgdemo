@@ -1,0 +1,49 @@
+<header class="elv-header{% if headerClass %} {{ headerClass }}{% endif %}">
+  <div class="elv-header-inner">
+
+    <!-- ROW 1: Party name -->
+    <div class="header-brand">
+      <a href="/">
+      <span class="brand-link">
+        Right to Recall<br>
+        Party </span>
+      </a>
+    </div>
+
+    <!-- ROW 2: Sections -->
+    <nav class="header-sections">
+      <ul class="elv-nav-menu">
+
+        <li>
+          <details class="nav-expand">
+            <summary>Placeholder</summary>
+            <ul>
+              <li><a href="/drafts/personal/">Placeholder 1</a></li>
+              <li><a href="/drafts/political/">Placeholder 2</a></li>
+              <li><a href="/drafts/archived/">placeholder 3</a></li>
+            </ul>
+          </details>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- ROW 3: Search -->
+    <div class="header-search">
+      <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+      <script src="/pagefind/pagefind-ui.js"></script>
+
+      <div id="search"></div>
+
+      <script>
+        window.addEventListener('DOMContentLoaded', () => {
+          new PagefindUI({
+            element: "#search",
+            showSubResults: true
+          });
+        });
+      </script>
+    </div>
+
+  </div>
+</header>

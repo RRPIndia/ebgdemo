@@ -1,6 +1,10 @@
 {
   "propertiesInDocument": "visible",
   "useTab": false,
-  "useMarkdownLinks": true,
-  "trashOption": "local"
+  "useMarkdownLinks": false,
+  "trashOption": "local",
+  "autoConvertHtml": true,
+  "showUnsupportedFiles": true,
+  "showInlineTitle": false,
+  "promptDelete": false
 }

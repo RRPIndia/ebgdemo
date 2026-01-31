@@ -1,6 +1,5 @@
-- [] merge donations and about us page in _includes
-- [] add 11ty.dev theme
-- [] add search function
+- [ ] merge donations and about us page in _includes
+- [ ] allow TCPIndia draft in eleventy ignore 
 # 🗳️ Mock EVM + VVPAT Simulator (Browser-based)
 
 This project is a **browser-based simulation of an Electronic Voting Machine (EVM) with VVPAT**, built using **HTML, SVG, CSS, and Vanilla JavaScript**.

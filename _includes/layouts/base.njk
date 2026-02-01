@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
 
   <meta charset="UTF-8">
@@ -35,48 +35,10 @@
   
   {# MAIN CONTENT #}
   <main>
-	<div class="content">
-
-		{% set segments = page.url | pathSegments %}
-
-{% if segments.length > 1 %}
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    <a href="/">Home</a>
-
-    {% set currentPath = "" %}
-    {% for part in segments %}
-      <span class="crumb-sep">›</span>
-
-      {% set currentPath = currentPath + "/" + part + "/" %}
-
-      {% if loop.last %}
-        <a href="{{ page.url }}">
-          {{ part | replace("-", " ") | title }}
-        </a>
-      {% else %}
-        {% set hasIndex = false %}
-        {% for p in collections.all %}
-          {% if p.url == currentPath %}
-            {% set hasIndex = true %}
-          {% endif %}
-        {% endfor %}
-
-        {% if hasIndex %}
-          <a href="{{ currentPath }}">
-            {{ part | replace("-", " ") | title }}
-          </a>
-        {% else %}
-          <span class="crumb-disabled">
-            {{ part | replace("-", " ") | title }}
-          </span>
-        {% endif %}
-      {% endif %}
-    {% endfor %}
-  </nav>
-{% endif %}
-
-		    {{ content | safe }}
-    	</div>
+    <div class="content">
+	{% include "layouts/breadcrumb.njk" %}
+	{{ content | safe }}
+    </div>
   </main>
 
   {% include "footer.html" %}

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HTML import/tcp.md",
+                "file": "drafts/hi/gau_niti.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "tcp"
+              "title": "gau_niti"
             }
           }
         ]
@@ -171,26 +171,26 @@
   },
   "active": "75eec577aca373fa",
   "lastOpenFiles": [
-    "manifesto/tcp.html",
+    "_site/pagefind/pagefind-entry.json",
+    "_site/pagefind/wasm.unknown.pagefind",
+    "_site/pagefind/pagefind-modular-ui.js",
+    "_site/pagefind/pagefind-ui.css",
+    "_site/pagefind/pagefind-highlight.js",
+    "_site/pagefind/pagefind.js",
+    "_site/pagefind/pagefind-modular-ui.css",
+    "_site/pagefind/pagefind-ui.js",
+    "_site/pagefind/index/hi_73d646c.pf_index",
+    "_site/pagefind/index/en_7c6348f.pf_index",
+    "_site/pagefind/fragment/hi_22dfb47.pf_fragment",
     "HTML import/tcp.md",
     "HTML import/khanij_munafa_batwara.md",
     "drafts/hi/statetcp.md",
-    "drafts/hi/hi.json",
     "drafts/hi/gau_niti.md",
     "drafts/hi.md",
-    "_site/drafts/hi/gau_niti/index.html",
-    "_site/drafts/hi/gau_niti",
-    "_site/drafts/gau_niti/index.html",
-    "_site/drafts/gau_niti",
     "HTML import/RHB.md",
     "drafts/N.md",
-    "drafts/index.njk",
-    "drafts/index.njk.html",
-    "HTML import/index.njk",
-    "drafts/khanij_munafa_batwara.html",
     "elections/2025/delhi/candidates.md",
     "HTML import/index.njk.md",
-    "drafts/index.html.bak",
     "drafts/hi/index.md",
     "drafts/elt/hi/EMPTY LAND TAX.md",
     "drafts/hi/tcpindia/TCPIndia.md",

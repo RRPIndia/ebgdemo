@@ -137,14 +137,15 @@ main {
   flex: 1;
   text-align: start;
   position: relative;
-  margin: 5vw auto;
+  margin: 5vw 0;
   max-width: 80ch;
 }
-
 .content {
   max-width: 93vw;
-  margin-inline: auto;
+  margin: 0;
+  padding-inline: 4vw;
 }
+
 
 /*====================
 ====================*/

@@ -1,0 +1,28 @@
+<nav class="header-sections">
+  <ul class="elv-nav-menu">
+    <li>
+      <details class="nav-expand">
+        <summary>
+          {% if lang == "hi" %}
+            ड्राफ्ट्स
+          {% else %}
+            Drafts
+          {% endif %}
+        </summary>
+
+        <ul>
+          {% for draft in collections.draft | sort(false, false, "data.draftNumber") %}
+            {% if draft.data.lang == lang and draft.data.draftNumber %}
+              <li>
+                <a href="{{ draft.url }}">
+                  {{ draft.data.draftNumber }}.
+                  {{ draft.data.title }}
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </details>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,18 @@
+---
+title: सभी कानूनों की सूची
+layout: layouts/base.njk
+---
+<h1>हिंदी ड्राफ्ट्स</h1>
+
+
+<ul>
+{% for post in collections.draft | sort(false, false, "data.draftNumber") %}
+  {% if post.data.lang == lang and post.data.draftNumber %}
+    <li>
+      <a href="{{ post.url }}">
+        {{ post.data.draftNumber }}. {{ post.data.title }}
+      </a>
+    </li>
+  {% endif %}
+{% endfor %}
+</ul>

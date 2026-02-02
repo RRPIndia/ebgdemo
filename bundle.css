@@ -1,3 +1,6 @@
+/* =========================
+   RESET (breadcrumb only)
+   ========================= */
 .breadcrumb,
 .breadcrumb * {
   all: unset;
@@ -5,7 +8,7 @@
 
 .breadcrumb {
   display: flex;
-  align-items: center;        /* 🔑 fixes above/below line issue */
+  align-items: center;
   gap: 0.5rem;
 
   overflow-x: auto;
@@ -13,12 +16,12 @@
   -webkit-overflow-scrolling: touch;
 
   font-size: 0.9rem;
-  line-height: 1;             /* 🔑 normalize text box height */
+  line-height: 1;
 }
 
 .breadcrumb a,
 .breadcrumb span {
-  display: inline-flex;       /* 🔑 text becomes box, not baseline */
+  display: inline-flex;
   align-items: center;
   line-height: 1;
   flex: 0 0 auto;
@@ -34,33 +37,40 @@
 }
 
 .breadcrumb .crumb-sep {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
   color: #999;
   user-select: none;
 }
 
 /* =========================
-   HEADER + NAV
+   SHARED PAGE CONTAINER
+   🔑 THIS FIXES ALIGNMENT
+   ========================= */
+
+.page-container {
+  max-width: 80ch;
+  margin-inline: auto;
+  padding-inline: 4vw;
+}
+
+/* =========================
+   HEADER
    ========================= */
 
 .elv-header {
-  position: static; /* can become sticky later */
-  z-index: 100;
   background: #fff;
   border-bottom: 1px solid #e5e5e5;
+  z-index: 100;
 }
 
-/* ONE column, THREE rows */
+/* header content is constrained */
 .elv-header-inner {
   display: grid;
   grid-template-rows: auto auto auto;
   row-gap: 0.75rem;
-  padding: 1rem 1rem 0.75rem;
+  padding-block: 1rem 0.75rem;
 }
 
-/* ROW 1: party name */
+/* ROW 1: brand */
 .header-brand {
   display: flex;
   justify-content: center;
@@ -69,28 +79,25 @@
 
 .brand-link {
   text-decoration: none;
-  font-size: clamp(28px, 11vw, 48px); /* bigger overall */
+  font-size: clamp(28px, 11vw, 48px);
   font-weight: 900;
   line-height: 1.15;
-  color: #000; /* solid black */
+  color: #000;
   letter-spacing: -0.02em;
 }
 
-/* ROW 2: sections (nav only) */
+/* ROW 2: navigation */
 .header-sections {
   width: 100%;
-  display: block;
 }
 
-/* NAV MENU */
 .elv-nav-menu {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
   margin: 0;
-  padding: 0.5rem 1rem; /* give left breathing room */
+  padding: 0;
   list-style: none;
-  justify-content: flex-start; /* LEFT aligned */
+  justify-content: flex-start;
 }
 
 .elv-nav-menu a {
@@ -107,7 +114,7 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
-/* ROW 3: search placement only */
+/* ROW 3: search / lang switch */
 .header-search {
   display: flex;
   justify-content: center;
@@ -121,34 +128,25 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
   background-color: #d3d1d41e;
   color: #333;
   line-height: 1.5;
 }
 
-/*====================
-      Main 
-====================*/
+/* =========================
+   MAIN CONTENT
+   ========================= */
 
 main {
   flex: 1;
-  text-align: start;
-  position: relative;
-  margin: 5vw 0;
-  max-width: 80ch;
+  margin-block: 5vw;
 }
+
 .content {
   max-width: 93vw;
-  margin: 0;
-  padding-inline: 4vw;
 }
-
-
-/*====================
-====================*/
 
 /* Safe <br> */
 br {
@@ -158,27 +156,26 @@ br {
 /* =========================
    TABLES
    ========================= */
+
 .table-wrapper {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* smooth swipe on mobile */
+  -webkit-overflow-scrolling: touch;
 }
 
 .table-wrapper table {
-  width: max-content;      /* table grows as wide as needed */
+  width: max-content;
   border-collapse: collapse;
 }
 
 .table-wrapper th,
 .table-wrapper td {
-  white-space: nowrap;     /* 🚫 no text wrapping */
-  text-align: left;        /* optional: avoids weird centering */
+  white-space: nowrap;
+  text-align: left;
 }
-
 
 table th,
 table td {
-  padding: 0.5rem 0.75rem; /* ← THIS is what you want */
-  white-space: nowrap;
+  padding: 0.5rem 0.75rem;
 }
 
 /* =========================
@@ -202,8 +199,6 @@ main a {
   margin-bottom: 2vh;
 }
 
-
-
 /* =========================
    FOOTER
    ========================= */
@@ -222,7 +217,7 @@ footer {
 }
 
 footer p a {
-  color: rgb(252, 244, 244);
+  color: #fcf4f4;
   font-size: 17px;
   font-weight: bolder;
 }
@@ -239,10 +234,10 @@ footer p a {
 /* =========================
    RESPONSIVE
    ========================= */
+
 @media (max-width: 768px) {
   .elv-nav-menu {
     flex-wrap: wrap;
-    justify-content: flex-start; /* keep LEFT aligned */
   }
 
   .elv-header-inner {

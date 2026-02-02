@@ -30,18 +30,18 @@
 <body>
 
 	{# HEADER (global navigation) #}
-	{% include "header.njk" %}
+	{% include "header/header.njk" %}
 
   
   {# MAIN CONTENT #}
   <main>
-    <div class="content">
-	{% include "layouts/breadcrumb.njk" %}
+    <div class="page-container content">
+	{% include "header/breadcrumb.njk" %}
 	{{ content | safe }}
     </div>
   </main>
 
-  {% include "footer.html" %}
+  {% include "footer/footer.html" %}
 
 </body>
 </html>

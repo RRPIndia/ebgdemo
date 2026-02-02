@@ -1,0 +1,56 @@
+{# Detect homepage (English or Hindi) #}
+{% set isHome = page.url == "/" or page.url == "/hi/" %}
+
+{% if isHome %}
+
+  {% if lang == "en" %}
+    <nav class="lang-switcher">
+      <a href="/hi/">हिंदी</a>
+    </nav>
+  {% elseif lang == "hi" %}
+    <nav class="lang-switcher">
+      <a href="/">English</a>
+    </nav>
+  {% endif %}
+
+{% endif %}
+
+
+
+{% if not isHome %}
+{# 1. Define language roots #}
+{% if lang == "en" %}
+  {% set currentRoot = "/en" %}
+  {% set otherRoot = "/hi" %}
+  {% set otherLabel = "हिंदी" %}
+{% else %}
+  {% set currentRoot = "/hi" %}
+  {% set otherRoot = "/en" %}
+  {% set otherLabel = "English" %}
+{% endif %}
+
+{# 2. Check if URL starts with current language root #}
+{% if page.url | slice(0, currentRoot | length) == currentRoot %}
+  {% set relativePath = page.url | replace(currentRoot, "") %}
+  {% set otherUrl = otherRoot + relativePath %}
+{% else %}
+  {% set otherUrl = null %}
+{% endif %}
+
+{# 3. Check if counterpart page exists #}
+{% set exists = false %}
+{% if otherUrl %}
+  {% for p in collections.all %}
+    {% if p.url == otherUrl %}
+      {% set exists = true %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{# 4. Render switcher #}
+<nav class="lang-switcher">
+  {% if exists %}
+    <a href="{{ otherUrl }}">{{ otherLabel }}</a>
+  {% endif %}
+</nav>
+{% endif %}

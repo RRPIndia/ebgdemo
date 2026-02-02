@@ -1,0 +1,37 @@
+<header data-pagefind-ignore class="elv-header{% if headerClass %} {{ headerClass }}{% endif %}">
+  <div class="page-container elv-header-inner">
+
+    <!-- ROW 1: Party name -->
+    <div class="header-brand">
+      <a href="/">
+      <span class="brand-link" >
+        Right to Recall<br>
+        Party </span>
+      </a>
+    </div>
+
+    <!-- ROW 2: Sections -->
+    {% include "header/section.njk" %}
+    
+    <!-- ROW 3: Search -->
+    <div class="header-search">
+      <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+      <script src="/pagefind/pagefind-ui.js"></script>
+
+      <div id="search"></div>
+
+      <script>
+        window.addEventListener('DOMContentLoaded', () => {
+          new PagefindUI({
+            element: "#search",
+            showSubResults: true
+          });
+        });
+      </script>
+    </div>
+
+    <!-- ROW-4  -->
+    {% include "header/lang-switcher.njk" %}
+
+  </div>
+</header>

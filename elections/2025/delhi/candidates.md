@@ -7,7 +7,6 @@ lang: en
 
 Here is a list of all RRP candidates who are contesting election in in Delhi VidhanSabha chunav
 
-<div class="table-wrapper">
 
 |Sr. No|Address|Candidate|
 |---|---|---|
@@ -32,4 +31,3 @@ Here is a list of all RRP candidates who are contesting election in in Delhi Vid
 |19|Model Town|Awdhesh Kumar Jha|
 |20|Okhla|Mohd Islam|
 
-</div>
